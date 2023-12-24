@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 figlet R3KON 
 
 domain=$1
@@ -27,14 +28,11 @@ subfinder -d $domain > $subdomain_path/found.txt
 echo -e "${RED} [+] Launching assetfinder ... ${RESET}"
 assetfinder $domain | grep $domain >> $subdomain_path/found.txt
 
-echo -e "${RED} [+] Launching amass ... ${RESET}"
-amass enum -d $domain >> $subdomain_path/found.txt
-
-echo -e "${RED} [+] Findinf alive subdomains ... ${RESET}"
-cat $subdomain_path/found.txt | grep $domain | sort -u | httprobe -prefer-https |grep https | sed 's/https\?:\/\///' | tee -a $subdomain_path/alive.txt
+echo -e "${RED} [+] Finding alive subdomains ... ${RESET}"
+cat $subdomain_path/found.txt | grep $domain | sort -u | httprobe -prefer-https | grep https | sed 's/https\?:\/\///' | tee -a $subdomain_path/alive.txt
 
 echo -e "${RED} [+] Taking screenshotsof alive subdomains ...${RESET}"
 gowitness file -f $subdomain_path/alive.txt -P $screenshot_path/ --no-http
 
 echo -e "${RED} [+] Running NMAP alive subdomains ...${RESET}"
-nmap -iL $subdomain_path/alive.txt -T4 -A -oN $scan_path/nmap.txt
+nmap -iL $subdomain_path/alive.txt -T4 -A  $scan_path/nmap.txt
