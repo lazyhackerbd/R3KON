@@ -1,5 +1,5 @@
 #!/bin/bash
-figlet R3KON|by|lazyhackerbd 
+figlet R3KON 
 
 domain=$1
 RED="\033[1;31m"
