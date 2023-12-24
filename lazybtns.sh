@@ -1,5 +1,4 @@
 #!/bin/bash
-
 figlet R3KON|by|lazyhackerbd 
 
 domain=$1
